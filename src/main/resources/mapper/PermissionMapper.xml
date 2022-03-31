@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongzhou.api.mapper.PermissionMapper">
+
+    <select id="findListBySysUserId" resultType="com.zhongzhou.api.entity.Permission">
+        select tp.id,
+               tp.name,
+               tp.code,
+               tp.parent_id,
+               tp.type,
+               tp.url,
+               tp.jump,
+               tp.level,
+               tp.icon,
+               tp.seq,
+               tp.create_user_id,
+               tp.create_time,
+               tp.last_update_user_id,
+               tp.last_update_time,
+               tp.delete_flag,
+               tp.version
+        from t_permission tp
+                 left join t_role_permission trp on tp.id = trp.per_id
+                 left join t_user_role tur on trp.role_id = tur.role_id
+        where tur.user_id = #{sysUserId}
+    </select>
+    <select id="findListByRoleId" resultType="com.zhongzhou.api.entity.Permission">
+        select tp.id,
+               tp.name,
+               tp.code,
+               tp.parent_id,
+               tp.type,
+               tp.url,
+               tp.jump,
+               tp.level,
+               tp.icon,
+               tp.seq,
+               tp.create_user_id,
+               tp.create_time,
+               tp.last_update_user_id,
+               tp.last_update_time,
+               tp.delete_flag,
+               tp.version
+        from t_permission tp
+                left join t_role_permission trp on tp.id = trp.per_id
+        where trp.role_id = #{roleId}
+        <if test="null != parentId">
+            and tp.parent_id = #{parentId}
+        </if>
+        <if test="null != type">
+            and tp.type = #{type}
+        </if>
+        <if test="null != level">
+            and tp.level = #{level}
+        </if>
+        order by tp.seq desc
+    </select>
+</mapper>

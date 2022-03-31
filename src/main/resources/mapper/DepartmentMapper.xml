@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongzhou.api.mapper.DepartmentMapper">
+
+    <select id="findBySysUserId" resultType="com.zhongzhou.api.entity.Department">
+        select td.id,
+               td.dep_name,
+               td.description,
+               td.parent_id,
+               td.create_time,
+               td.create_user_id,
+               td.last_update_time,
+               td.last_update_user_id,
+               td.delete_flag,
+               td.version
+        from t_department td
+                 left join t_user_department tud on td.id = tud.dep_id
+        where tud.user_id = #{sysUserId}
+    </select>
+</mapper>

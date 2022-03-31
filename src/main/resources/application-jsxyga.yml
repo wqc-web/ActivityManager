@@ -1,0 +1,66 @@
+server:
+  servlet:
+    context-path: /ActivityManager
+    session:
+      timeout: 1800s
+  port: 8081
+mybatis-plus:
+  global-config:
+    refresh: false
+logging:
+  level:
+    com:
+      zhongzhou: DEBUG
+debug: true
+
+spring:
+  #  数据库驱动
+  datasource:
+    dynamic:
+      #      设置默认的数据源或者数据源组,默认值即为master
+      primary: master
+      datasource:
+        master:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/db_activity_manager?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8
+          username: root
+          password: Xygaj12#$
+      druid:
+        # 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
+        filters: stat
+        # 最大连接池数量
+        max-active: 10
+        # 初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时
+        initial-size: 10
+        # 最小连接池数量
+        min-idle: 4
+        time-between-eviction-runs-millis: 60000
+        # 获取连接时最大等待时间，单位毫秒
+        max-wait: 60000
+        # 连接保持空闲而不被驱逐的最长时间
+        min-evictable-idle-time-millis: 300000
+        # 是否缓存preparedStatement，即PSCache
+        pool-prepared-statements: false
+    # 数据源类型
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: -1ms
+        max-idle: 200
+        min-idle: 10
+    lettuce:
+      pool:
+        max-active: 200
+        max-wait: -1ms
+        max-idle: 200
+        min-idle: 10
+    timeout: 10s
+constants:
+  file_src: http://jsxyga.com//ActivityManager/file
+  file_path: /home/attachment/ActivityManager/

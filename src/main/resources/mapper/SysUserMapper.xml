@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhongzhou.api.mapper.SysUserMapper">
+
+    <select id="listByRoleId" resultType="com.zhongzhou.api.entity.SysUser">
+        select u.* from t_sys_user u
+        left join t_user_role ur on u.id = ur.user_id
+        where ur.role_id = #{roleId}
+    </select>
+    <select id="listBydepId" resultType="com.zhongzhou.api.entity.SysUser">
+        select u.* from t_sys_user u
+        left join t_user_department tud on u.id = tud.user_id
+        where tud.dep_id = #{depId}
+    </select>
+    <select id="queryActivityUser" resultType="com.zhongzhou.api.entity.SysUser">
+        select  u.*   from t_sys_user u
+        left join t_activity_user au
+        on au.user_id = u.id
+        LEFT JOIN t_activity a
+        on au.activity_id = a.id
+        where a.id = #{activityId}
+        order by au.id asc
+    </select>
+    <select id="userPage" resultType="com.zhongzhou.api.entity.SysUser">
+        select u.* from t_sys_user u
+        LEFT JOIN t_activity_user au
+        on u.id = au.user_id
+        LEFT JOIN t_activity a
+        on au.activity_id = a.id
+        where u.delete_flag = 0
+        and a.delete_flag = 0
+        and a.id = #{activityId}
+        <if test="userName != null">
+            and u.user_name like CONCAT(CONCAT('%', #{userName}), '%')
+        </if>
+        order by au.id asc
+        limit  #{startPage} , #{size}
+    </select>
+    <select id="userCount" resultType="java.lang.Integer">
+        select  count(u.id)  from t_sys_user u
+        LEFT JOIN t_activity_user au
+        on u.id = au.user_id
+        LEFT JOIN t_activity a
+        on au.activity_id = a.id
+        where u.delete_flag = 0
+        and a.delete_flag = 0
+        and a.id = #{activityId}
+        <if test="userName != null">
+            and u.user_name like CONCAT(CONCAT('%', #{userName}), '%')
+        </if>
+    </select>
+</mapper>
